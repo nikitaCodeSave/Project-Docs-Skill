@@ -65,7 +65,7 @@ curl -Lo project-docs/examples/stt-service/docs/PRD.md https://raw.githubusercon
 curl -Lo project-docs/examples/stt-service/docs/SPEC.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/SPEC.md
 curl -Lo project-docs/examples/stt-service/docs/api.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/api.md
 curl -Lo project-docs/examples/stt-service/docs/data-formats.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/data-formats.md
-curl -Lo project-docs/examples/stt-service/docs/decisions/ADR-001-whisperx.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/decisions/ADR-001-whisperx.md
+curl -Lo project-docs/examples/stt-service/docs/decisions/ADR-001-tech-stack.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/decisions/ADR-001-tech-stack.md
 ```
 
 ---
@@ -96,7 +96,7 @@ curl -Lo project-docs/examples/stt-service/docs/decisions/ADR-001-whisperx.md ht
 Скилл описывает не только **формат** документов, но и **процесс** их создания:
 
 ```
-Discovery → PRD → ⏸️ валидация → SPEC → ⏸️ валидация → ADR → CLAUDE.md
+Discovery → PRD → ⏸️ валидация → SPEC + ADR-001 (tech-stack) → ⏸️ валидация → ADR-002+ → CLAUDE.md
 ```
 
 ### Ключевые принципы процесса
@@ -164,9 +164,10 @@ project/
 |------|----------|----------|
 | 0 | — | **Discovery:** интервью с заказчиком |
 | 1 | PRD.md | Бизнес-цели, scope → ⏸️ валидация |
-| 2 | SPEC.md | Функциональные требования → ⏸️ валидация |
+| 2 | SPEC.md | Функциональные требования |
 | 2 | api.md, data-formats.md | Детализация (если нужно) |
-| 3 | ADR-*.md | Технические решения |
+| 2 | **ADR-001-tech-stack.md** | Технологический стек (ОБЯЗАТЕЛЬНО) → ⏸️ валидация |
+| 3 | ADR-002-*.md | Дополнительные архитектурные решения (при необходимости) |
 | 4 | **CLAUDE.md** | Точка входа (создаётся **последним**) |
 
 **Почему CLAUDE.md последним?** Он содержит "Технологический стек" и "Ключевые решения", которые берутся из ADR.
@@ -373,7 +374,7 @@ Project-Docs-Skill/               # Корень репозитория
                 ├── api.md
                 ├── data-formats.md
                 └── decisions/
-                    └── ADR-001-whisperx.md
+                    └── ADR-001-tech-stack.md
 ```
 
 **Важно:** При копировании в свой проект копируй только папку `project-docs/`.

@@ -14,13 +14,13 @@
 | [docs/SPEC.md](docs/SPEC.md) | Функциональные требования, acceptance criteria |
 | [docs/api.md](docs/api.md) | CLI интерфейс, команды, флаги |
 | [docs/data-formats.md](docs/data-formats.md) | JSON/SRT/TXT форматы |
-| [docs/decisions/](docs/decisions/) | Почему выбран WhisperX |
+| [docs/decisions/](docs/decisions/) | Технологический стек и архитектурные решения |
 
 ## Ключевые решения
 
 | Решение | Обоснование | ADR |
 |---------|-------------|-----|
-| WhisperX | Единый pipeline, 70x realtime | [ADR-001](docs/decisions/ADR-001-whisperx.md) |
+| Python + WhisperX + ffmpeg | ML-экосистема, единый pipeline, 70x realtime | [ADR-001](docs/decisions/ADR-001-tech-stack.md) |
 | Локальные модели | Работа офлайн | [ADR-002](docs/decisions/ADR-002-local-models.md) |
 
 ## Технологический стек
@@ -43,7 +43,7 @@
 - Создавать ADR при выборе технологий
 
 ### ❌ DO NOT
-- Не менять STT engine без нового ADR
-- Не добавлять облачные зависимости
-- Не реализовывать real-time (out of scope)
-- Не реализовывать web-интерфейс (out of scope)
+- Менять STT engine без нового ADR
+- Добавлять облачные зависимости
+- Реализовывать real-time (out of scope)
+- Реализовывать web-интерфейс (out of scope)
