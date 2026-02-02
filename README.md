@@ -10,6 +10,7 @@
 
 - [Быстрый старт](#быстрый-старт)
 - [Что делает скилл](#что-делает-скилл)
+- [Процесс работы](#процесс-работы)
 - [Философия](#философия)
 - [Структура документации](#структура-документации)
 - [Установка по платформам](#установка-по-платформам)
@@ -56,7 +57,10 @@ curl -Lo project-docs/templates/API.md.template https://raw.githubusercontent.co
 curl -Lo project-docs/templates/DATA-FORMATS.md.template https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/templates/DATA-FORMATS.md.template
 
 # Примеры (stt-service)
+curl -Lo project-docs/examples/stt-service/README.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/README.md
 curl -Lo project-docs/examples/stt-service/CLAUDE.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/CLAUDE.md
+curl -Lo project-docs/examples/stt-service/docs/_discovery-log.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/_discovery-log.md
+curl -Lo project-docs/examples/stt-service/docs/_prd-v1-draft.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/_prd-v1-draft.md
 curl -Lo project-docs/examples/stt-service/docs/PRD.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/PRD.md
 curl -Lo project-docs/examples/stt-service/docs/SPEC.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/SPEC.md
 curl -Lo project-docs/examples/stt-service/docs/api.md https://raw.githubusercontent.com/nikitaCodeSave/Project-Docs-Skill/main/project-docs/examples/stt-service/docs/api.md
@@ -84,6 +88,27 @@ curl -Lo project-docs/examples/stt-service/docs/decisions/ADR-001-whisperx.md ht
 > **До:** «Сделай мне сервис транскрипции» → агент выбирает произвольные технологии, структуру, API
 >
 > **После:** PRD + SPEC + ADR → агент следует зафиксированным требованиям и ограничениям
+
+---
+
+## Процесс работы
+
+Скилл описывает не только **формат** документов, но и **процесс** их создания:
+
+```
+Discovery → PRD → ⏸️ валидация → SPEC → ⏸️ валидация → ADR → CLAUDE.md
+```
+
+### Ключевые принципы процесса
+
+| Принцип | Описание |
+|---------|----------|
+| **Discovery First** | Не пиши документы, пока не проведёшь интервью с заказчиком |
+| **Validation Loops** | После каждого документа — СТОП и подтверждение от заказчика |
+| **MVP Scope** | Начинай с минимума, расширяй после валидации |
+| **CLAUDE.md последним** | Он агрегирует решения из ADR |
+
+Подробнее см. секцию "Процесс работы" в [SKILL.md](project-docs/SKILL.md).
 
 ---
 
@@ -131,16 +156,20 @@ project/
         └── ADR-002-*.md
 ```
 
-### Когда создавать каждый документ
+### Порядок создания документов
 
-| Документ | Когда создавать | Обязателен |
-|----------|-----------------|------------|
-| CLAUDE.md | Всегда, первым | Да |
-| PRD.md | Начало проекта | Да |
-| SPEC.md | После PRD | Да |
-| ADR-*.md | При выборе технологий | По необходимости |
-| api.md | Если есть CLI/REST | По необходимости |
-| data-formats.md | Если сложные структуры | По необходимости |
+> **Важно:** Сначала discovery, потом документация. Не генерируй "правдоподобные" документы — выясняй реальные требования.
+
+| Этап | Документ | Действие |
+|------|----------|----------|
+| 0 | — | **Discovery:** интервью с заказчиком |
+| 1 | PRD.md | Бизнес-цели, scope → ⏸️ валидация |
+| 2 | SPEC.md | Функциональные требования → ⏸️ валидация |
+| 2 | api.md, data-formats.md | Детализация (если нужно) |
+| 3 | ADR-*.md | Технические решения |
+| 4 | **CLAUDE.md** | Точка входа (создаётся **последним**) |
+
+**Почему CLAUDE.md последним?** Он содержит "Технологический стек" и "Ключевые решения", которые берутся из ADR.
 
 ---
 
@@ -323,19 +352,22 @@ read:
 Project-Docs-Skill/               # Корень репозитория
 ├── README.md                     # Этот файл
 └── project-docs/                 # Папка со скиллом
-    ├── SKILL.md                  # Основной файл скилла
+    ├── SKILL.md                  # Основной файл скилла (процесс + шаблоны)
     ├── checklist.md              # Чеклист готовности документации
     ├── templates/                # Шаблоны документов
     │   ├── CLAUDE.md.template    # Точка входа
-    │   ├── PRD.md.template       # Бизнес-требования
+    │   ├── PRD.md.template       # Бизнес-требования (+ MVP Scope)
     │   ├── SPEC.md.template      # Функциональные требования
     │   ├── ADR.md.template       # Архитектурные решения
     │   ├── API.md.template       # Контракты интерфейсов
     │   └── DATA-FORMATS.md.template  # Форматы данных
     └── examples/                 # Примеры использования
         └── stt-service/          # Пример: сервис транскрипции
+            ├── README.md         # Описание итеративного процесса
             ├── CLAUDE.md
             └── docs/
+                ├── _discovery-log.md     # Пример discovery-интервью
+                ├── _prd-v1-draft.md      # Пример итерации PRD
                 ├── PRD.md
                 ├── SPEC.md
                 ├── api.md
